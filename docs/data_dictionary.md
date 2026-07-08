@@ -9,7 +9,7 @@
 | release_id | Specific release edition ID | Yes | Tracks come from a specific release |
 | release_title | Release title | Yes | Display |
 | release_date | Date of this release edition | Yes | Temporal info |
-| country | Release country | Yes | Useful metadata |
+| country | Release country/market for the selected MusicBrainz release edition | Yes | Not artist origin |
 | medium_format | CD/digital/vinyl/etc. | Yes | Explains edition source |
 | track_position | Track order | Yes | Tracklist structure |
 | track_title | Track title | Yes | Display/search |

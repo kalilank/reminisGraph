@@ -94,3 +94,9 @@ retrieval better.)*
 - Realized artist-to-artist relationships don't capture band-to-band 
   overlap directly — I had to specifically filter for shared "Person" 
   entities to find cross-band connections
+
+## 2026-07-08, 15:27 — Phase 3 
+
+I learned that MusicBrainz `country` does not necessarily mean artist origin. It describes the selected release edition. This matters because graph schema design can become misleading if I turn every column into a node without understanding its meaning.
+
+I also clarified that the current dataset uses one clean studio album per artist, not each artist's most famous album.
