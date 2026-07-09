@@ -100,3 +100,55 @@ retrieval better.)*
 I learned that MusicBrainz `country` does not necessarily mean artist origin. It describes the selected release edition. This matters because graph schema design can become misleading if I turn every column into a node without understanding its meaning.
 
 I also clarified that the current dataset uses one clean studio album per artist, not each artist's most famous album.
+
+---
+
+## 2026-07-08 — Phase 4 & 4.5: Graph schema design and review
+
+**What I did:**
+- Explored MusicBrainz relationship data beyond album/track metadata.
+- Designed Graph Schema v0 with two layers:
+  - Catalog structure: Artist → ReleaseGroup → Release → Recording
+  - Relationship-rich discovery: Person → Artist and Artist → Tag
+- Reviewed which relationships should be included in v0 and which should be deferred.
+
+**Main decision:**
+I included `MEMBER_OF` and `HAS_TAG` because they directly support the project’s goal: comparing semantic similarity against graph-based relationships. I excluded relationships like tribute/named-after for now because they add noise and are less central to the first retrieval comparison.
+
+**Insight:**
+Graph design is not just “turn everything into nodes.” Each node and relationship needs a reason to exist, especially if it will later affect retrieval results.
+
+---
+
+## 2026-07-09 — Phase 5: Neo4j graph import
+
+**What I did:**
+- Prepared clean CSV files for Neo4j import.
+- Imported the graph into Neo4j with nodes for Artist, Person, Tag, ReleaseGroup, Release, and Recording.
+- Added relationships such as `CREATED`, `HAS_RELEASE`, `HAS_TRACK`, `MEMBER_OF`, and `HAS_TAG`.
+- Ran sanity checks for node counts, relationship counts, duplicate IDs, and missing references.
+
+**What I learned:**
+Neo4j makes the relationship structure visible in a way that a table does not. Seeing paths like:
+
+Pearl Jam <- MEMBER_OF - Matt Cameron - MEMBER_OF → Soundgarden
+
+---
+
+## 2026-07-09 — Phase 6: Embeddings and vector similarity baseline
+
+**What I did:**
+
+- Created clean artist-level embedding text using album titles and MusicBrainz tags.
+- Excluded member names and membership relationships to avoid relational leakage.
+- Generated embeddings using all-MiniLM-L6-v2.
+- Calculated cosine similarity between artists and saved top-k vector results.
+
+**Main decision:**
+The vector baseline should not include graph-only information like shared members. Otherwise, vector retrieval might “cheat” by learning the same relationship signal that graph retrieval is supposed to test.
+
+**Initial result:**
+The highest vector similarity pair was Pearl Jam and Blur with a cosine similarity score of 0.760920. Pearl Jam was slightly more similar to Blur than to Soundgarden in the vector baseline, even though Pearl Jam and Soundgarden have stronger graph-relevant evidence through shared membership.
+
+**Insight:**
+Vector retrieval seems to capture tag/style similarity, while graph retrieval is expected to better capture relational and historical connections. This supports the core comparison of the project: vector and graph retrieval may be useful for different kinds of music discovery questions.
