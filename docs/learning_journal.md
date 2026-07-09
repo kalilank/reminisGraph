@@ -152,3 +152,15 @@ The highest vector similarity pair was Pearl Jam and Blur with a cosine similari
 
 **Insight:**
 Vector retrieval seems to capture tag/style similarity, while graph retrieval is expected to better capture relational and historical connections. This supports the core comparison of the project: vector and graph retrieval may be useful for different kinds of music discovery questions.
+
+## Phase 8 — Graph Retriever Baseline
+
+Built the first graph-based retriever using Neo4j traversal.
+
+The retriever finds artists connected through shared members. This is different from vector retrieval because it uses explicit graph relationships instead of cosine similarity.
+
+Example findings:
+- Pearl Jam connects to Soundgarden through Matt Cameron.
+- Nirvana connects to Soundgarden through Jason Everman.
+
+This supports the project idea that graph retrieval can reveal historical or relational music connections that may not be obvious from text/tag similarity.
